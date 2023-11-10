@@ -17,7 +17,7 @@ public class RabbitMQConfig {
     @Bean
     public Queue queue(){
         //passando nome da fila e dizendo se é duravel ou não
-        return new Queue(queue, true);
+        return new Queue(this.queue, true);
     }
 
     @Bean
