@@ -11,13 +11,22 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMQConfig {
-    @Value("${broker.queue.email.name}")
-    private String queue;
+    @Value("${broker.queue.doctor.name}")
+    private String doctorQueue;
+    @Value("${broker.queue.patient.name}")
+    private String patientQueue;
+
 
     @Bean
-    public Queue queue(){
+    public Queue doctorQueue(){
         //passando nome da fila e dizendo se é duravel ou não
-        return new Queue(this.queue, true);
+        return new Queue(this.doctorQueue, true);
+    }
+
+    @Bean
+    public Queue patientQueue(){
+        //passando nome da fila e dizendo se é duravel ou não
+        return new Queue(this.patientQueue, true);
     }
 
     @Bean

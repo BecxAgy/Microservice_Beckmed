@@ -8,6 +8,8 @@ import com.ms.doctor.model.Doctor;
 import com.ms.doctor.producers.DoctorProducer;
 import com.ms.doctor.repository.DoctorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,17 +26,18 @@ public class DoctorService {
     @Autowired
     private AddressService addressService;
 
-    public List<DoctorDTO> convertList(List<Doctor> list){
-
-        return list.stream().map(DoctorDTO :: fromEntity).collect(Collectors.toList());
+    private Page<DoctorDTO> convertPage(Page<Doctor> page) {
+        return page.map(DoctorDTO::fromEntity);
     }
 
-    public List<DoctorDTO> searchAll(){
-        return  this.convertList(this.repository.findAll());
+    public Page<DoctorDTO> searchAll(int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        return repository.findAll(pageable).map(DoctorDTO::fromEntity);
     }
 
-    public List<DoctorDTO> getActiveDoctors() {
-        return this.convertList(repository.findByActive(true));
+    public Page<DoctorDTO> getActiveDoctors(int page, int size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        return repository.findByActive(true, pageable).map(DoctorDTO::fromEntity);
     }
     @Transactional
     public Doctor createDoctor(Doctor doctor) {

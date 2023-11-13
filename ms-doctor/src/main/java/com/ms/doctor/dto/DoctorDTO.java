@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 @AllArgsConstructor
 @Data
 public class DoctorDTO {
+    private Long id;
     @NotBlank
     private String name;
     @NotBlank

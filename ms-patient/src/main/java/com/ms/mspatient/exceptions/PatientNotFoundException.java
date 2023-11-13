@@ -1,0 +1,8 @@
+package com.ms.mspatient.exceptions;
+
+public class PatientNotFoundException extends RuntimeException{
+    public PatientNotFoundException(String message){
+        super(message);
+    }
+
+}

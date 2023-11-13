@@ -6,6 +6,7 @@ import com.ms.doctor.model.Doctor;
 import com.ms.doctor.service.DoctorService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,16 +21,15 @@ public class DoctorController {
     @Autowired
     private DoctorService service;
     @GetMapping("/get-all-actives")
-    public  List<DoctorDTO> listActive(){
-
-        return service.getActiveDoctors();
-
+    public Page<DoctorDTO> listActive(@RequestParam(defaultValue = "0") int page,
+                                      @RequestParam(defaultValue = "10") int size) {
+        return service.getActiveDoctors(page, size);
     }
+
     @GetMapping("/get-all")
-    public  List<DoctorDTO> getAll(){
-
-        return service.getActiveDoctors();
-
+    public Page<DoctorDTO> getAll(@RequestParam(defaultValue = "0") int page,
+                                  @RequestParam(defaultValue = "10") int size) {
+        return service.searchAll(page, size);
     }
     @PostMapping("/create")
     public ResponseEntity<DoctorDTO> createDoctor(@RequestBody @Valid DoctorDTO doctorDTO){
