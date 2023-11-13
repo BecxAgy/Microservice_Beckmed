@@ -20,7 +20,7 @@ public class DoctorProducer {
         String subject = "Cadastro realizado!";
         String text = "Olá, "+ doctor.getName() + "\nSeja bem-vindo ao beckmed! ";
         var emailDto = new EmailDoctorDTO();
-        emailDto.setDoctorId(doctor.getId());
+        emailDto.setId(doctor.getId());
         emailDto.setEmailTo(doctor.getEmail());
         emailDto.setSubject(subject);
         emailDto.setText(text);

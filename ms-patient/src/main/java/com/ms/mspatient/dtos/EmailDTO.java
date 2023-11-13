@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class EmailDTO {
-    private Long patientId;
+    private Long id;
     private String emailTo;
     private String subject;
     private String text;

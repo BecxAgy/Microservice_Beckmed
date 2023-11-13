@@ -13,7 +13,7 @@ import org.modelmapper.ModelMapper;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PatientDTO {
-    private String id;
+    private Long id;
     @NotNull
     private String name;
     @NotNull

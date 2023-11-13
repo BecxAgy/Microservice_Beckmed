@@ -14,14 +14,14 @@ public class DoctorEmailConsumer {
     @Autowired
     private EmailService emailService;
 
+
     @RabbitListener(queues = "${broker.queue.doctor.name}")
     public void listenDoctorQueue(@Payload EmailDTO emailDoctorDTO){
-       var emailModel = new EmailModel ();
+        var emailModel = new EmailModel ();
         BeanUtils.copyProperties(emailDoctorDTO, emailModel);
 
         //send email
         emailService.sendEmail(emailModel);
         System.out.println(emailDoctorDTO.emailTo());
     }
-
 }

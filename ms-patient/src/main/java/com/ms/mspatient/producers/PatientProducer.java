@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class PatientProducer {
     @Autowired
     private RabbitTemplate rabbitTemplate;
-    @Value("${broker.queue.patient.name}")
+    @Value("${broker.queue.email.name}")
     private String routingKey;
 
 
@@ -20,7 +20,7 @@ public class PatientProducer {
         String subject = "Cadastro realizado!";
         String text = "Olá, paciente "+ Patient.getName() + "\nSeja bem-vindo ao beckmed! ";
         var emailDto = new EmailDTO();
-        emailDto.setPatientId(Patient.getId());
+        emailDto.setId(Patient.getId());
         emailDto.setEmailTo(Patient.getEmail());
         emailDto.setSubject(subject);
         emailDto.setText(text);

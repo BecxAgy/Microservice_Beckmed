@@ -18,16 +18,16 @@ public class RabbitMQConfig {
 
 
     @Bean
+    public Queue patientQueue(){
+        //passando nome da fila e dizendo se é duravel ou não
+        return new Queue(this.patientQueue, true);
+    }
+    @Bean
     public Queue doctorQueue(){
         //passando nome da fila e dizendo se é duravel ou não
         return new Queue(this.doctorQueue, true);
     }
 
-    @Bean
-    public Queue patientQueue(){
-        //passando nome da fila e dizendo se é duravel ou não
-        return new Queue(this.patientQueue, true);
-    }
 
     @Bean
     public Jackson2JsonMessageConverter messageConverter(){
