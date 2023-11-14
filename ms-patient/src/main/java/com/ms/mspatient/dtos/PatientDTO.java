@@ -30,6 +30,7 @@ public class PatientDTO {
         //last map Patient
         PatientDTO dto = mapper.map(patientEntity, PatientDTO.class);
         dto.setAddress(addDto);
+        dto.setId(patientEntity.getId());
 
         return dto;
     }
@@ -40,6 +41,7 @@ public class PatientDTO {
         Address address = this.address.toEntity();
         Patient dto = modelMapper.map(this, Patient.class);
         dto.setAddress(address);
+
 
         return dto;
     }

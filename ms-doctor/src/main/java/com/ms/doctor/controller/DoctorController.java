@@ -31,6 +31,21 @@ public class DoctorController {
                                   @RequestParam(defaultValue = "10") int size) {
         return service.searchAll(page, size);
     }
+
+    @GetMapping("/get-all-without-page")
+    public ResponseEntity<List<DoctorDTO>> getAll(){
+
+        return ResponseEntity.status(HttpStatus.OK).body(service.getAllActives());
+
+    }
+
+    @GetMapping("/active/{id}")
+    public ResponseEntity<DoctorDTO> isActive(@PathVariable Long id){
+        Doctor patient = service.getDoctorActiveById(id);
+
+        return  ResponseEntity.status(HttpStatus.OK).body(DoctorDTO.fromEntity(patient));
+
+    }
     @PostMapping("/create")
     public ResponseEntity<DoctorDTO> createDoctor(@RequestBody @Valid DoctorDTO doctorDTO){
         //torno ele para entidade

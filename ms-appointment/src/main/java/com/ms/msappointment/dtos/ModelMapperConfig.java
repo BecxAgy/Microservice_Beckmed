@@ -15,8 +15,6 @@ public class ModelMapperConfig {
         // Defina a estratégia de correspondência, que determina como os campos são mapeados por nome
         modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        // Adicione outras configurações personalizadas, se necessário
-
         return modelMapper;
     }
 }

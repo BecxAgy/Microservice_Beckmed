@@ -1,4 +1,4 @@
-package com.ms.msappointment.models;
+package com.ms.msappointment.domain.models;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name="TB_APPOINTMENTS")
 public class Appointment {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "appointment_id")
     private Long id;
     private Long fkDoctorId;

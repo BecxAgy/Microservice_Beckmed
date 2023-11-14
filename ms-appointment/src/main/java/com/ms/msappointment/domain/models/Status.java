@@ -1,4 +1,4 @@
-package com.ms.msappointment.models;
+package com.ms.msappointment.domain.models;
 
 public enum Status {
     MARKED,

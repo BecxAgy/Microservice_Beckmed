@@ -17,18 +17,28 @@ public class PatientController {
     @Autowired
     private PatientService service;
 
-    @GetMapping("/get-all")
-    public List<PatientDTO> getAll(){
+    @GetMapping("/get-all-actives")
+    public ResponseEntity<List<PatientDTO>> getAll(){
 
-        return service.getActivePatients();
+        return ResponseEntity.status(HttpStatus.OK).body(service.getActivePatients());
 
-    } 
+    }
+
+    @GetMapping("/get-active/{id}")
+    public ResponseEntity<PatientDTO> isActive(@PathVariable Long id){
+        Patient patient = service.getPatientActiveById(id);
+
+        return  ResponseEntity.status(HttpStatus.OK).body(PatientDTO.fromEntity(patient));
+
+    }
+
     @PostMapping("/create")
     public ResponseEntity<PatientDTO> create(@RequestBody PatientDTO patientDTO){
         Patient patient = patientDTO.toEntity();
         service.createPatient(patient);
+
         
-        return ResponseEntity.status(HttpStatus.CREATED).body(patientDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body( PatientDTO.fromEntity(patient));
     }
     
    

@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface DoctorRepository extends JpaRepository<Doctor, Long> {
 
-
+    List<Doctor> findByActive(boolean active);
     Page<Doctor> findByActive(boolean b, PageRequest pageable);
 }

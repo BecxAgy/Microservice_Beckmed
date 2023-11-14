@@ -1,25 +1,29 @@
-package com.ms.msappointment.services;
+package com.ms.msappointment.domain.services;
 
 import com.ms.msappointment.exceptions.*;
-import com.ms.msappointment.models.Appointment;
-import com.ms.msappointment.models.Status;
-import com.ms.msappointment.repositories.AppointmentRepository;
+import com.ms.msappointment.domain.models.Appointment;
+import com.ms.msappointment.domain.models.Status;
+import com.ms.msappointment.domain.repositories.AppointmentRepository;
+import jakarta.persistence.Table;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
-
+@Service
 public class AppointmentService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
 
     public Appointment createAppointment(Appointment appointment) {
+        appointment.setStatus(Status.MARKED);
+        appointment.setCancellationReason("");
+
         return appointmentRepository.save(appointment);
     }
 
@@ -59,6 +63,7 @@ public class AppointmentService {
 
     }
 
+    @Transactional
     public void cancelAppointment(Long appointmentId, String cancellationReason) {
         Appointment appointment = this.findById(appointmentId);
 
@@ -68,15 +73,29 @@ public class AppointmentService {
             throw new InvalidCancelationException("A consulta não pode ser cancelada com menos de 24 horas de antecedência");
         }
 
-        // Preenche as informações de cancelamento
         appointment.setStatus(Status.CANCELED);
         appointment.setCancellationReason(cancellationReason);
 
-        // Salva as alterações
         appointmentRepository.save(appointment);
     }
 
 
+    public void checkIfDoctorHasAppointmentAtDate(Long fkDoctorId, LocalDateTime dateHour) {
 
+
+        Optional<Appointment> existingAppointment = appointmentRepository.findByDoctorIdAndDateHour(fkDoctorId, dateHour);
+
+        if (existingAppointment.isPresent()) {
+            throw new InvalidAppointmentException("Já existe uma consulta nesse horario");
+        }
+
+        // Verifica se há uma consulta marcada no intervalo de uma hora antes ou depois
+        LocalDateTime oneHourBefore = dateHour.minusHours(1);
+        LocalDateTime oneHourAfter = dateHour.plusHours(1);
+
+        Optional<Appointment> appointmentInInterval = appointmentRepository.findByDoctorIdAndDateHourBetween(fkDoctorId, oneHourBefore, oneHourAfter);
+
+        if(appointmentInInterval.isPresent()) throw new InvalidAppointmentException("Já existe uma consulta nesse horário");
+    }
 
 }

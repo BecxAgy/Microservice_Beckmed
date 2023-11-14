@@ -2,6 +2,7 @@ package com.ms.doctor.service;
 
 
 import com.ms.doctor.dto.DoctorDTO;
+import com.ms.doctor.exceptions.DoctorInactiveException;
 import com.ms.doctor.exceptions.DoctorNotFoundException;
 import com.ms.doctor.model.Address;
 import com.ms.doctor.model.Doctor;
@@ -25,6 +26,18 @@ public class DoctorService {
     private DoctorProducer doctorProducer;
     @Autowired
     private AddressService addressService;
+
+    public List<DoctorDTO> convertList(List<Doctor> list){
+        return list.stream().map(DoctorDTO :: fromEntity).collect(Collectors.toList());
+    }
+
+    public List<DoctorDTO> searchAll(){
+        return  this.convertList(this.repository.findAll());
+    }
+
+    public List<DoctorDTO> getAllActives() {
+        return this.convertList(repository.findByActive(true));
+    }
 
     private Page<DoctorDTO> convertPage(Page<Doctor> page) {
         return page.map(DoctorDTO::fromEntity);
@@ -59,6 +72,14 @@ public class DoctorService {
         }
 
         return doctorExist;
+    }
+
+    public Doctor getDoctorActiveById(Long id){
+        Optional<Doctor> doctorExist =  this.findById(id);
+
+        if(!doctorExist.get().isActive()) throw new DoctorInactiveException("Esse médico encontra-se inativo");
+
+        return doctorExist.get();
     }
     public Doctor updateDoctor(Doctor updatedDoctor, DoctorDTO updatedData) {
 
