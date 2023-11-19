@@ -1,7 +1,10 @@
 package com.ms.msdoctoremail.services;
 
+import com.ms.msdoctoremail.dtos.EmailAppointmentDTO;
+import com.ms.msdoctoremail.models.EmailAppointmentModel;
 import com.ms.msdoctoremail.models.EmailModel;
 import com.ms.msdoctoremail.models.StatusEmail;
+import com.ms.msdoctoremail.repository.EmailAppointmentRepository;
 import com.ms.msdoctoremail.repository.EmailRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,8 @@ import java.time.LocalDateTime;
 public class EmailService {
     @Autowired
     private EmailRepository emailRepository;
+    @Autowired
+    private EmailAppointmentRepository emailAppointmentRepository;
     @Autowired
     private JavaMailSender emailSender;
     @Value(value="${spring.mail.username}")
@@ -39,6 +44,26 @@ public class EmailService {
             emailModel.setStatusEmail(StatusEmail.ERROR);
         }finally {
             return emailRepository.save(emailModel);
+        }
+    }
+
+    public EmailAppointmentModel sendEmailAppointment(EmailAppointmentModel emailModel){
+        try{
+            emailModel.setSendDateTime(LocalDateTime.now());
+            emailModel.setEmailFrom(emailFrom);
+
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(emailModel.getEmailDoctorTo());
+            message.setTo(emailModel.getEmailDoctorTo());
+            message.setSubject(emailModel.getSubject());
+            message.setText(emailModel.getText());
+            emailSender.send((message));
+
+            emailModel.setStatusEmail(StatusEmail.SENT);
+        }catch (MailException m){
+            emailModel.setStatusEmail(StatusEmail.ERROR);
+        }finally {
+            return emailAppointmentRepository.save(emailModel);
         }
     }
 }

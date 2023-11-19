@@ -16,6 +16,8 @@ public class RabbitMQConfig {
     @Value("${broker.queue.patient.name}")
     private String patientQueue;
 
+    @Value("${broker.queue.appointment.name}")
+    private String appointmentQueue;
 
     @Bean
     public Queue patientQueue(){
@@ -26,6 +28,11 @@ public class RabbitMQConfig {
     public Queue doctorQueue(){
         //passando nome da fila e dizendo se é duravel ou não
         return new Queue(this.doctorQueue, true);
+    }
+    @Bean
+    public Queue appointmentQueue(){
+        //passando nome da fila e dizendo se é duravel ou não
+        return new Queue(this.appointmentQueue, true);
     }
 
 
